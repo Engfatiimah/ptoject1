@@ -91,20 +91,28 @@ For locals who want to rediscover home. For travelers who want the real thing.
 
 ## Data
 
-All data is stored locally in `lib/data/events.dart` as a `List<Map>`:
+Raw data is stored locally in `lib/data/events.dart` as a `List<Map>`, then converted into model objects using `fromJson` factories:
+
+- `EventModel` — an activity with its name, image, description, guide, and a list of cities
+- `CityModel` — a destination with its name, region, image, and description
 
 ```dart
-List<Map<String, dynamic>> events = [
-  {
-    "name": "Diving",
-    "image": "assets/images/diving/diving_cover.webp",
-    "description": "...",
-    "guide": "Faisal",
-    "cities": [
-      {"name": "Umluj", "city": "Tabuk", "image": "...", "description": "..."},
-      ...
-    ],
-  },
-  ...
-];
+// lib/models/event_model.dart
+factory EventModel.fromJson(Map<String, dynamic> json) {
+  List<CityModel> citiesList = [];
+  for (var item in json["cities"] ?? []) {
+    citiesList.add(CityModel.fromJson(item));
+  }
+  return EventModel(
+    name: json["name"] ?? "No name",
+    image: json["image"],
+    description: json["description"] ?? "",
+    guide: json["guide"] ?? "Guide",
+    cities: citiesList,
+  );
+}
+```
+
+The home screen loads the data once in `initState()` and builds a `List<EventModel>` for the UI.
+
 ```
