@@ -1,4 +1,3 @@
-
 # Where's the Event? 🇸🇦
 
 > **Ready to see a side of Saudi you never knew existed?**
