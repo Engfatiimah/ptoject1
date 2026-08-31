@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
+import '../models/event_model.dart';
 import '../screens/cities_screen.dart';
 
 class EventCard extends StatelessWidget {
-  final Map<String, dynamic> event;
+  final EventModel event;
 
   const EventCard({super.key, required this.event});
 
@@ -24,7 +24,7 @@ class EventCard extends StatelessWidget {
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             child: Image.asset(
-              event["image"],
+              event.image!,
               width: width,
               height: width * 0.5,
               fit: BoxFit.cover,
@@ -36,15 +36,12 @@ class EventCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  event["name"],
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  event.name!,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  event["description"],
+                  event.description!,
                   style: const TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 12),

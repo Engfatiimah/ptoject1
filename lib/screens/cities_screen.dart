@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../models/event_model.dart';
+import '../models/city_model.dart';
 
 class CitiesScreen extends StatefulWidget {
-  final Map<String, dynamic> event;
+  final EventModel event;
 
   const CitiesScreen({super.key, required this.event});
 
@@ -16,13 +18,13 @@ class _CitiesScreenState extends State<CitiesScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.sizeOf(context).width;
 
-    List cities = (widget.event["cities"] as List).where((city) {
-      return city["name"].toLowerCase().contains(searchText.toLowerCase());
+    List<CityModel> cities = widget.event.cities.where((city) {
+      return city.name!.toLowerCase().contains(searchText.toLowerCase());
     }).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.event["name"]),
+        title: Text(widget.event.name!),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
@@ -47,6 +49,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
       body: ListView.builder(
         itemCount: cities.length,
         itemBuilder: (context, index) {
+          var city = cities[index];
           return Container(
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -60,7 +63,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                   child: Image.asset(
-                    cities[index]["image"],
+                    city.image!,
                     width: width,
                     height: width * 0.45,
                     fit: BoxFit.cover,
@@ -72,16 +75,16 @@ class _CitiesScreenState extends State<CitiesScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        cities[index]["name"],
+                        city.name!,
                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        cities[index]["city"],
+                        city.city!,
                         style: const TextStyle(fontSize: 14, color: Color(0xFF006C35)),
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        cities[index]["description"],
+                        city.description!,
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ],
@@ -99,7 +102,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
           child: ElevatedButton.icon(
             onPressed: () {},
             icon: const Icon(Icons.phone),
-            label: Text("Contact your guide: ${widget.event["guide"]}"),
+            label: Text("Contact your guide: ${widget.event.guide}"),
           ),
         ),
       ),

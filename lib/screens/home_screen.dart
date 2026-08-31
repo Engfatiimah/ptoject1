@@ -1,37 +1,41 @@
 import 'package:flutter/material.dart';
-
 import '../data/events.dart';
+import '../models/event_model.dart';
 import '../widgets/event_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<EventModel> eventList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  void getData() {
+    for (var item in events) {
+      eventList.add(EventModel.fromJson(item));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Where's the Event?")),
-      body: ListView(
-        children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 20, 16, 4),
-            child: Text(
-              "Welcome to Saudi 🇸🇦",
-              textAlign: TextAlign.center,
-
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "Pick an activity and discover where to go.",
-              textAlign: TextAlign.center,
-
-              style: TextStyle(color: Colors.grey),
-            ),
-          ),
-          ...events.map((event) => EventCard(event: event)),
-        ],
+      appBar: AppBar(
+        title: const Text("Where's the Event?"),
+      ),
+      body: ListView.builder(
+        itemCount: eventList.length,
+        itemBuilder: (context, index) {
+          return EventCard(event: eventList[index]);
+        },
       ),
     );
   }
