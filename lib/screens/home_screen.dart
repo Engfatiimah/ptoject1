@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../data/events.dart';
-import '../models/event_model.dart';
+import 'package:project1/service/database.dart';
 import '../widgets/event_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,31 +10,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<EventModel> eventList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
-  void getData() {
-    for (var item in events) {
-      eventList.add(EventModel.fromJson(item));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Where's the Event?"),
       ),
-      body: ListView.builder(
-        itemCount: eventList.length,
-        itemBuilder: (context, index) {
-          return EventCard(event: eventList[index]);
-        },
+      body: FutureBuilder(
+        future: Database().getallEvants(),
+        builder: (context, asyncSnapshot) {
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (asyncSnapshot.hasError) {
+            return Center(child: Text("Error: ${asyncSnapshot.error}"));
+          }
+
+          final events = asyncSnapshot.data ?? [];
+
+          return ListView.builder(
+            itemCount: events.length,
+            itemBuilder: (context, index) {
+              return EventCard(event: events[index]);
+            },
+          );
+        }
       ),
     );
   }
