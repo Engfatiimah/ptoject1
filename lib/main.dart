@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
-import '../widgets/event_card.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+     await dotenv.load();
+
 
   await Supabase.initialize(
-    url: "https://mvdswnpgcivzvedfznfa.supabase.co",
-    publishableKey: "sb_publishable_tvFO-FX3r6BvOHz7v-bDGw_hoifnAhe",
+    url: dotenv.get('url-dataBase'),
+    publishableKey: dotenv.get('publishableKey-dataBase'),
   );
-
+   
   runApp(MyApp());
 }
 
